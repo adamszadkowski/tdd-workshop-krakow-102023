@@ -1,21 +1,22 @@
 package pl.allegro.tdd.api
 
 import org.springframework.web.bind.annotation.*
-import java.util.concurrent.atomic.AtomicReference
+import pl.allegro.tdd.domain.GreetingService
 
 @RestController
 @RequestMapping("/greeting")
-class GreetingEndpoint {
-    private val message = AtomicReference("hello world")
+class GreetingEndpoint(
+    private val greetingService: GreetingService,
+) {
 
     @GetMapping
     fun getGreeting(): GreetingResponse {
-        return GreetingResponse(message.get())
+        return GreetingResponse(greetingService.getGreeting())
     }
 
     @PutMapping
     fun updateGreeting(@RequestBody updateRequest: UpdateRequest): GreetingResponse {
-        return GreetingResponse(message.updateAndGet { updateRequest.message })
+        return GreetingResponse(greetingService.updateGreeting(updateRequest.message))
     }
 }
 
