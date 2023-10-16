@@ -11,9 +11,9 @@ class GreetingService {
         return message.get()
     }
 
-    fun updateGreeting(message: String): Greeting {
-        if (message.isEmpty()) throw InvalidMessageException()
-        else if (message.length >= 100) throw InvalidMessageException()
-        return this.message.updateAndGet { Greeting(message) }
-    }
+    fun updateGreeting(message: String): Greeting =
+        when (message.length) {
+            !in 1..<100 -> throw InvalidMessageException()
+            else -> this.message.updateAndGet { Greeting(message) }
+        }
 }
